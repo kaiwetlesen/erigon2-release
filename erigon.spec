@@ -63,6 +63,7 @@ install -m 0644 -D %{_builddir}/%{NVR}/TESTING.md -t %{buildroot}%{_datadir}/doc
 install -m 0644 -D %{_builddir}/%{NVR}/COPYING* -t %{buildroot}%{_datadir}/licenses/%{name}
 install -m 0644 -D %{_builddir}/%{NVR}/AUTHORS -t %{buildroot}%{_datadir}/licenses/%{name}
 install -m 0644 -D %{_builddir}/%{NVR}/%{name}.1.gz -t %{buildroot}%{_mandir}/man1
+install -m 0644 -D %{_builddir}/%{NVR}/%{name}_opts -t %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
 
 %files
@@ -71,6 +72,7 @@ install -m 0644 -D %{_builddir}/%{NVR}/%{name}.1.gz -t %{buildroot}%{_mandir}/ma
 %{_bindir}/*
 %{_mandir}/man1/%{name}.1.gz
 %{_prefix}/lib/systemd/system/*
+%{_sysconfdir}/sysconfig/%{name}
 
 
 %pre
