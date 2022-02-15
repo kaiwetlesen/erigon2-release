@@ -3,18 +3,22 @@ Vendor:			Ledgerwatch
 Version:        2022.01.02
 Release:        beta%{?dist}
 Summary:        The Erigon Ethereum Client
-Source0:		%{_sourcedir}/%{name}-%{version}-%{release}.tar.gz
+Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
 
 License:        LGPL-3.0
 URL:            https://github.com/ledgerwatch/erigon
 
+Requires:       libmdbx
+
+BuildRequires: systemd-rpm-macros, rubygem-ronn-ng, libmdbx-devel
+BuildRequires: golang >= 1.16
+%if "%{dist}" == ".el8"
+BuildRequires: gcc-toolset-10-gcc
+BuildRequires: gcc-toolset-10-gcc-c++
+%else
 BuildRequires: gcc >= 10
 BuildRequires: gcc-c++ >= 10
-BuildRequires: git
-BuildRequires: gzip
-BuildRequires: systemd-rpm-macros
-BuildRequires: rubygem-ronn-ng
-BuildRequires: golang >= 1.16
+%endif
 
 %define giturl https://github.com/
 %define repourl %{giturl}%{vendor}/%{name}.git
@@ -26,38 +30,28 @@ Erigon is an implementation of Ethereum (aka "Ethereum client"), on the efficien
 
 %prep
 # Build fails with GCC Go, so die unless we can set that alternative:
-GOVER=$(alternatives --list | awk '/^go\s/{print $3}' | grep -v gcc)
-if [ -z "$GOVER" ]; then
-	echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary before rerunning this build!'
+if go version | grep -i gcc; then
+	echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
 	exit -1
 fi
-# Start as many jobs as we have actual CPU cores
-N_JOBS=$(lscpu -p | grep -v '^#' | cut -d, -f2 | sort -u | wc -l)
-rm -rf %{NVR}
-echo 'Grabbing source to %{NVR}'
-git clone --recurse-submodules -j$N_JOBS %{repourl} %{NVR}
-echo 'Refreshing tags and submodules...'
-git -C %{NVR} pull --recurse-submodules
-git -C %{NVR} fetch --all --tags --recurse-submodules
-git -C %{NVR} submodule update --init --recursive --force
-git -C %{NVR} checkout tags/v%{version} -b v%{version}
-echo 'Building source archive with bundled submodules...'
-# Git strips the NVR because we implicitly change the pwd, but we want to preserve it, thus this hinky business:
-git -C %{NVR} ls-files --recurse-submodules | awk '!/\.git/{print "%{NVR}/"$0}' | tar -T - -czf %{_sourcedir}/%{NVR}.tar.gz
+%autosetup
 
 %build
+%if "%{dist}" == ".el8"
+    . /opt/rh/gcc-toolset-10/enable
+%endif
 # Start as many jobs as we have actual CPU cores
-N_JOBS=$(lscpu -p | grep -v '^#' | cut -d, -f2 | sort -u | wc -l)
-cd %{NVR}
-make -j$N_JOBS %{name} rpcdaemon integration sentry txpool downloader hack db-tools
-ln README.md %{name}.1.md
+make %{name} rpcdaemon integration sentry txpool hack pics
+%{__mv} README.md %{name}.1.md
 ronn -r --manual %{Summary} --organization %{Vendor} %{name}.1.md
-gzip %{name}.1
-rm %{name}.1.md
+%{__gzip} %{name}.1
+%{__rm} %{name}.1.md
 # Rename binaries with common names to %{name}_{binary} scheme:
 cd build/bin
-for file in hack integration mdbx_* rpcdaemon downloader sentry txpool; do
-	mv $file %{name}_$file
+for binary in *; do
+    if echo $binary | grep -q '^%{name}'; then
+	    %{__mv} ${binary} %{name}_${binary}
+    fi
 done
 cd -
 
@@ -72,23 +66,18 @@ install -m 0644 -D %{_builddir}/%{NVR}/%{name}.1.gz -t %{buildroot}%{_mandir}/ma
 
 
 %files
-%{_bindir}/%{name}
-%{_bindir}/%{name}_hack
-%{_bindir}/%{name}_integration
-%{_bindir}/%{name}_mdbx_chk
-%{_bindir}/%{name}_mdbx_copy
-%{_bindir}/%{name}_mdbx_drop
-%{_bindir}/%{name}_mdbx_dump
-%{_bindir}/%{name}_mdbx_load
-%{_bindir}/%{name}_mdbx_stat
-%{_bindir}/%{name}_rpcdaemon
-%{_bindir}/%{name}_downloader
-%{_bindir}/%{name}_sentry
-%{_bindir}/%{name}_txpool
-%{_datarootdir}/licenses/%{name}/AUTHORS
+#%{_bindir}/%{name}
+#%{_bindir}/%{name}_hack
+#%{_bindir}/%{name}_integration
+#%{_bindir}/%{name}_rpcdaemon
+#%{_bindir}/%{name}_downloader
+#%{_bindir}/%{name}_sentry
+#%{_bindir}/%{name}_txpool
+%license COPYING COPYING.LESSER AUTHORS
+%doc README.md TESTING.md
+%{_bindir}/*
 %{_mandir}/man1/%{name}.1.gz
-%license %{NVR}/COPYING %{NVR}/COPYING.LESSER
-%doc %{NVR}/README.md %{NVR}/TESTING.md
+%{_prefix}/lib/systemd/system/*
 
 
 %pre
