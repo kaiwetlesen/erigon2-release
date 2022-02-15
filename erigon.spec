@@ -66,13 +66,6 @@ install -m 0644 -D %{_builddir}/%{NVR}/%{name}.1.gz -t %{buildroot}%{_mandir}/ma
 
 
 %files
-#%{_bindir}/%{name}
-#%{_bindir}/%{name}_hack
-#%{_bindir}/%{name}_integration
-#%{_bindir}/%{name}_rpcdaemon
-#%{_bindir}/%{name}_downloader
-#%{_bindir}/%{name}_sentry
-#%{_bindir}/%{name}_txpool
 %license COPYING COPYING.LESSER AUTHORS
 %doc README.md TESTING.md
 %{_bindir}/*
