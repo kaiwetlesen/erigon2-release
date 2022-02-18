@@ -50,8 +50,8 @@ if go version | grep -i gcc; then
     echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
     exit -1
 fi
-#gem install ronn
 gem install md2man
+gem install rdoc
 %autosetup -b 0
 %autosetup -b 1
 
@@ -62,7 +62,6 @@ gem install md2man
 export GIT_BRANCH="%{branch}"
 export GIT_COMMIT="%{commit}"
 export GIT_TAG="v%{version}"
-# Start as many jobs as we have actual CPU cores
 make %{name} rpcdaemon integration sentry txpool hack pics
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > erigon.1.md
 sed -i 's/[\d128-\d255]//g' README.md >> erigon.1.md
@@ -85,14 +84,15 @@ cd -
 %install
 %define erigon_srcdir  %{_builddir}/%{name}-%{version}
 %define suppl_srcdir   %{_builddir}/%{name}-release-%{suppl_ver}
-%{__install} -m 0755 -D -s   %{erigon_srcdir}/build/bin/*   -t %{buildroot}%{_bindir}
-%{__install} -m 0644 -D      %{erigon_srcdir}/README.md     -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/TESTING.md    -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/COPYING*      -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/AUTHORS       -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/%{name}.1.gz  -t %{buildroot}%{_mandir}/man1
-%{__install} -m 0644 -D      %{suppl_srcdir}/*.service      -t %{buildroot}%{_prefix}/lib/systemd/system
-%{__install} -m 0644 -D      %{suppl_srcdir}/%{name}_opts   -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%{__install} -m 0755 -D -s   %{erigon_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
+%{__install} -m 0644 -D      %{erigon_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{erigon_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{erigon_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{erigon_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{erigon_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
+%{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_prefix}/lib/systemd/system
+%{__install} -m 0644 -D      %{suppl_srcdir}/firewallsvcs/*.xml -t %{buildroot}%{_prefix}/lib/firewalld/services
+%{__install} -m 0644 -D      %{suppl_srcdir}/sysconfig/%{name}  -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
 
 %files
@@ -101,6 +101,7 @@ cd -
 %{_bindir}/*
 %{_mandir}/man1/%{name}.1.gz
 %{_prefix}/lib/systemd/system/*
+%{_prefix}/lib/firewalld/services/*
 %{_sysconfdir}/sysconfig/%{name}
 
 
