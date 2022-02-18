@@ -30,8 +30,7 @@ Requires:       libmdbx
 Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
 Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
 
-# Note: ruby and ruby-devel are needed to setup ronn, the markdown to manpage compiler
-BuildRequires: ruby, ruby-devel, libmdbx-devel, binutils, git
+BuildRequires: libmdbx, libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
 BuildRequires: golang >= 1.16
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
@@ -50,8 +49,7 @@ if go version | grep -i gcc; then
     echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
     exit -1
 fi
-gem install md2man
-gem install rdoc
+#gem install md2man
 %autosetup -b 0
 %autosetup -b 1
 
@@ -64,8 +62,9 @@ export GIT_COMMIT="%{commit}"
 export GIT_TAG="v%{version}"
 make %{name} rpcdaemon integration sentry txpool hack pics
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > erigon.1.md
-sed -i 's/[\d128-\d255]//g' README.md >> erigon.1.md
-md2man-roff erigon.1.md > erigon.1
+#sed -i 's/[\d128-\d255]//g' README.md >> erigon.1.md
+cat erigon.1.md README.md | go-md2man > %{name}.1
+#md2man-roff erigon.1.md > erigon.1
 %{__gzip} %{name}.1
 %{__rm} %{name}.1.md
 # Rename binaries with common names to %{name}_{binary} scheme:
