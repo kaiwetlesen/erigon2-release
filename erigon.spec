@@ -31,7 +31,7 @@ Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{versio
 Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
 
 # Note: ruby and ruby-devel are needed to setup ronn, the markdown to manpage compiler
-BuildRequires: systemd-rpm-macros, ruby, ruby-devel, libmdbx-devel, binutils
+BuildRequires: ruby, ruby-devel, libmdbx-devel, binutils, git
 BuildRequires: golang >= 1.16
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
