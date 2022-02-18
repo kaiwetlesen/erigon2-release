@@ -7,7 +7,7 @@ Documentation=https://github.com/ledgerwatch/erigon/
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/erigon
-ExecStart=/usr/bin/erigon --datadir $ERIGON_DATADIR -n $ERIGON_OPTIONS
+ExecStart=/usr/bin/erigon --datadir $ERIGON_DATADIR $ERIGON_OPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 UMask=0066
 Restart=on-failure
