@@ -32,7 +32,7 @@ Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags
 
 BuildRequires: libmdbx, libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
 BuildRequires: golang >= 1.16
-%if "%{dist}" == ".el8"
+%if %{rhel}
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
 %else
@@ -44,6 +44,10 @@ BuildRequires: gcc-c++ >= 10
 Erigon is an implementation of Ethereum (aka "Ethereum client"), on the efficiency frontier, written in Go.
 
 %prep
+# DEBUG: list out all repos verbosely:
+if command -v dnf &> /dev/null; then
+	dnf --verbose repolist
+fi
 # Build fails with GCC Go, so die unless we can set that alternative:
 if go version | grep -i gcc; then
     echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
