@@ -32,7 +32,7 @@ Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags
 
 BuildRequires: libmdbx, libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
 BuildRequires: golang >= 1.16
-%if "%{?rhel}" != ""
+%if "%{dist}" != ".el8"
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
 %else
@@ -72,7 +72,6 @@ cat erigon.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
 %{__rm} %{name}.1.md
 # Rename binaries with common names to %{name}_{binary} scheme:
-mkdir -p build/debuginfo
 cd build/bin
 # This is done in two separate loops to prevent nondeterministic wildcard evaluation:
 for binary in *; do
