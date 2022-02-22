@@ -32,7 +32,7 @@ Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags
 
 BuildRequires: libmdbx, libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
 BuildRequires: golang >= 1.16
-%if %{?rhel}
+%if "%{?rhel}" != ""
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
 %else
@@ -58,7 +58,7 @@ fi
 %autosetup -b 1
 
 %build
-%if "%{dist}" == ".el8"
+%if "%{?rhel}" != ""
     . /opt/rh/gcc-toolset-10/enable
 %endif
 export GIT_BRANCH="%{branch}"
