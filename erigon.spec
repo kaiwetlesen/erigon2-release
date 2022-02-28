@@ -77,7 +77,7 @@ cd build/bin
 for binary in *; do
     %{__strip} --strip-debug --strip-unneeded ${binary}
     if echo $binary | grep -qv '^%{name}'; then
-        %{__mv} ${binary} %{name}_${binary}
+        %{__mv} ${binary} %{name}-${binary}
     fi
 done
 cd -
