@@ -17,11 +17,9 @@ Name:           erigon
 Vendor:         Ledgerwatch
 Version:        %{erigon_ver}
 Release:        beta%{?dist}
-Summary:        The Erigon Ethereum Client
-License:        LGPL-3.0
+Summary:        A very efficient Ethereum client
+License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
-
-Requires:       libmdbx
 
 # Computed macros:
 # These depend on a combination of the flags and other macros.
@@ -30,7 +28,7 @@ Requires:       libmdbx
 Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
 Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
 
-BuildRequires: libmdbx, libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
+BuildRequires: libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
 BuildRequires: golang >= 1.16
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
@@ -41,7 +39,8 @@ BuildRequires: gcc-c++ >= 10
 %endif
 
 %description
-Erigon is an implementation of Ethereum (aka "Ethereum client"), on the efficiency frontier, written in Go.
+An implementation of Ethereum (aka "Ethereum client"), on the efficiency
+frontier, written in Go.
 
 %prep
 # DEBUG: list out all repos verbosely:
@@ -104,21 +103,22 @@ cd -
 %{_mandir}/man1/%{name}.1.gz
 %{_prefix}/lib/systemd/system/*
 %{_prefix}/lib/firewalld/services/*
-%{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 
 %pre
 if ! getent group %{name} &> /dev/null; then
     groupadd -r %{name}
 fi
-if getent passwd %{name} &> /dev/null; then
-    mkdir -p %{_sharedstatedir}/%{name}
-    chown -R %{name}:%{name} %{_sharedstatedir}/%{name}
-else
+if ! getent passwd %{name} &> /dev/null; then
     useradd -r -g %{name} -m -d %{_sharedstatedir}/%{name} -k /dev/null %{name}
 fi
 
 
 %changelog
-* Tue Jan 25 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.01.02 (beta)
+* Tue Feb 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-beta%{?dist}
+- Large jump in Erigon version
+- Removing "dangerous" commands from pre section
+
+* Tue Jan 25 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.01.02-beta%{?dist}
 - First Erigon RPM release
