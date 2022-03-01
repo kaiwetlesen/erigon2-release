@@ -13,7 +13,7 @@ ERIGON_OPTIONS=""
 #ERIGON_OPTIONS="--chain goerli"
 
 # Options set in ERIGON_RPCDAEMON_OPTIONS are passed to the RPC daemon:
-ERIGON_RPCDAEMON_OPTIONS=""
+ERIGON_RPCDAEMON_OPTIONS="--grpc --ws --http.api eth,erigon,web3,trace"
 
 # Options set in ERIGON_SENTRY_OPTIONS are passed to Sentry:
 ERIGON_SENTRY_OPTIONS=""
