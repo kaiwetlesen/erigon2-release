@@ -1,4 +1,3 @@
-# Global macros:
 # Disable the debug package as we don't provide it:
 %global debug_package %{nil}
 # TODO: rig up debug package support with golang.
@@ -11,18 +10,15 @@
 %{!?branch:     %global branch      stable}
 %{!?commit:     %global commit      c4e29e33707474cd7485f137310952a8ca14009f}
 # Supplementary files version:
-%{!?suppl_ver:  %global suppl_ver   0.1.0}
+%{!?suppl_ver:  %global suppl_ver   0.1.1}
 
 Name:           erigon
 Vendor:         Ledgerwatch
 Version:        %{erigon_ver}
-Release:        beta%{?dist}
+Release:        0%{?dist}
 Summary:        A very efficient Ethereum client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
-
-# Computed macros:
-# These depend on a combination of the flags and other macros.
 
 # File sources:
 Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
@@ -42,19 +38,16 @@ BuildRequires: gcc-c++ >= 10
 An implementation of Ethereum (aka "Ethereum client"), on the efficiency
 frontier, written in Go.
 
+
 %prep
-# DEBUG: list out all repos verbosely:
-if command -v dnf &> /dev/null; then
-	dnf --verbose repolist
-fi
 # Build fails with GCC Go, so die unless we can set that alternative:
 if go version | grep -i gcc; then
     echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
     exit -1
 fi
-#gem install md2man
 %autosetup -b 0
 %autosetup -b 1
+
 
 %build
 %if "%{?rhel}" != ""
@@ -65,14 +58,11 @@ export GIT_COMMIT="%{commit}"
 export GIT_TAG="v%{version}"
 make %{name} rpcdaemon integration sentry txpool hack pics
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > erigon.1.md
-#sed -i 's/[\d128-\d255]//g' README.md >> erigon.1.md
 cat erigon.1.md README.md | go-md2man > %{name}.1
-#md2man-roff erigon.1.md > erigon.1
 %{__gzip} %{name}.1
 %{__rm} %{name}.1.md
 # Rename binaries with common names to %{name}_{binary} scheme:
 cd build/bin
-# This is done in two separate loops to prevent nondeterministic wildcard evaluation:
 for binary in *; do
     %{__strip} --strip-debug --strip-unneeded ${binary}
     if echo $binary | grep -qv '^%{name}'; then
@@ -116,6 +106,12 @@ fi
 
 
 %changelog
+* Tue  1 Mar 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-0%{?dist}
+- Corrected erroneous service names in spec
+- Removed "v" from the version tag
+- Setting numeric release version to accomodate release bug fixes and updates
+- Cleaned up cruft from the spec file
+
 * Mon Feb 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-beta%{?dist}
 - Large jump in Erigon version
 - Removing "dangerous" commands from pre section
