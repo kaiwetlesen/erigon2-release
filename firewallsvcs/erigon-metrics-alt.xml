@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<service>
-  <short>Erigon Alternate Metrics</short>
-  <description>Erigon metrics alternate port. Useful for instances where results from both metrics engines are desired.</description>
-  <port protocol="tcp" port="6061"/>
-</service>

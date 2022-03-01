@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>Erigon Sentry</short>
-  <description>These ports are used for sentry RPC connections.</description>
-  <!-- Eth/NN Peering: -->
+  <description>This set of ports are typicall used for Erigon Sentry RPC inter-process connections with TxPool. Enable these if intending to use TxPool and Sentry.</description>
   <port protocol="tcp" port="9091"/>
+  <port protocol="tcp" port="9092"/>
+  <port protocol="tcp" port="9093"/>
 </service>
