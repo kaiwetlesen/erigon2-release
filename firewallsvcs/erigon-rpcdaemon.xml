@@ -2,5 +2,5 @@
 <service>
   <short>Erigon RPC Daemon</short>
   <description>Erigon RPC service, used for JSON-RPC queries to Erigon via the RPC daemon.</description>
-  <port protocol="tcp" port="9090"/>
+  <port protocol="tcp" port="8545"/>
 </service>
