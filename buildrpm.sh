@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 spec=$1
-if [ -f "$spec" ]; then
+if [ ! -f "$spec" ]; then
 	echo "Spec $1 not found"
 	exit 1
 fi
