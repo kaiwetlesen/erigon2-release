@@ -106,7 +106,7 @@ fi
 
 
 %changelog
-* Tue  1 Mar 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-0%{?dist}
+* Tue Mar 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-0%{?dist}
 - Corrected erroneous service names in spec
 - Removed "v" from the version tag
 - Setting numeric release version to accomodate release bug fixes and updates
