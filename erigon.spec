@@ -7,7 +7,7 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  v2022.02.04}
+%{!?erigon_ver: %global erigon_ver  2022.02.04}
 %{!?branch:     %global branch      stable}
 %{!?commit:     %global commit      c4e29e33707474cd7485f137310952a8ca14009f}
 # Supplementary files version:
@@ -116,7 +116,7 @@ fi
 
 
 %changelog
-* Tue Feb 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-beta%{?dist}
+* Mon Feb 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-beta%{?dist}
 - Large jump in Erigon version
 - Removing "dangerous" commands from pre section
 
