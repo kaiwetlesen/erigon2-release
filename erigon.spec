@@ -10,7 +10,7 @@
 %{!?branch:     %global branch      stable}
 %{!?commit:     %global commit      25a68e08a5287892022291f0c6ef98684be12838}
 # Supplementary files version:
-%{!?suppl_ver:  %global suppl_ver   0.1.1}
+%{!?suppl_ver:  %global suppl_ver   0.1.2}
 
 Name:           erigon
 Vendor:         Ledgerwatch
