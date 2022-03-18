@@ -13,9 +13,9 @@ else
 fi
 GIT_BRANCH=$(git branch --no-color --show-current)
 GIT_COMMIT=$(git rev-parse HEAD)
-if [ "$2" = 'rpmspec' ]; then
+if [ "$2" = 'list' ]; then
 	GIT_TAG=$(echo $GIT_TAG | tr -d 'v')
-	echo "--define 'erigon_ver $GIT_TAG' --define 'commit $GIT_COMMIT'"
+	echo "$GIT_TAG	$GIT_COMMIT"
 else
 	echo GIT_TAG=$GIT_TAG
 	echo GIT_COMMIT=$GIT_COMMIT
