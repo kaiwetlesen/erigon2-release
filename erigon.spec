@@ -6,9 +6,9 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.02.04}
+%{!?erigon_ver: %global erigon_ver  2022.03.01}
 %{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      c4e29e33707474cd7485f137310952a8ca14009f}
+%{!?commit:     %global commit      25a68e08a5287892022291f0c6ef98684be12838}
 # Supplementary files version:
 %{!?suppl_ver:  %global suppl_ver   0.1.1}
 
