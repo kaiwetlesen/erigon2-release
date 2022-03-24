@@ -15,7 +15,7 @@
 Name:           erigon
 Vendor:         Ledgerwatch
 Version:        %{erigon_ver}
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        A very efficient Ethereum client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
@@ -106,7 +106,10 @@ fi
 
 
 %changelog
-* Tue Mar 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.02.04-0%{?dist}
+* Thu Mar 24 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.03.01-1%{?dist}
+- Bumped the release to pull in a new version of LibMDBX
+
+* Tue Mar 1 2022  Kai Wetlesen <kaiw@semiotic.ai> - 2022.03.01-0%{?dist}
 - Corrected erroneous service names in spec
 - Removed "v" from the version tag
 - Setting numeric release version to accomodate release bug fixes and updates
