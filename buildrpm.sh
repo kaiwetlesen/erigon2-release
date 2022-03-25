@@ -13,10 +13,20 @@ rpmdev-setuptree
 cd -
 dnf -y builddep $spec
 if [ -f builds.txt ]; then
-	echo Run these commands:
+	echo '----------------------- Fetching sources -----------------------'
 	while read build; do
-		echo "spectool $build --get-files --sourcedir $spec && rpmbuild $build -bb $spec &"
+		version="$(echo "$build" | cut -d, -f1 | tr -d \')"
+		commit="$(echo "$build" | cut -d, -f2 | tr -d \')"
+		spectool --debug --get-files --all --sourcedir "--define=$version" "--define=$commit" $spec &
 	done < builds.txt
+	wait
+	echo '----------------------- Running builds -----------------------'
+	while read build; do
+		version=$(echo "$build" | cut -d, -f1)
+		commit=$(echo "$build" | cut -d, -f2)
+		rpmbuild -D "$version" -D "$commit" -bb $spec &
+	done < builds.txt
+	wait
 else
 	rpmbuild -bb $spec
 fi
