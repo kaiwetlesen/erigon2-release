@@ -6,7 +6,7 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.03.01}
+%{!?erigon_ver: %global erigon_ver  2022.03.02}
 %{!?branch:     %global branch      stable}
 %{!?commit:     %global commit      25a68e08a5287892022291f0c6ef98684be12838}
 # Supplementary files version:
@@ -106,6 +106,9 @@ fi
 
 
 %changelog
+* Mon Mar 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.03.02-0%{?dist}
+- Bumped the release to pull in patches to LibMDBX
+
 * Thu Mar 24 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.03.01-1%{?dist}
 - Bumped the release to pull in a new version of LibMDBX
 
