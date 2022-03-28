@@ -8,7 +8,7 @@
 # Erigon version, buildable branch, & commit hash:
 %{!?erigon_ver: %global erigon_ver  2022.03.02}
 %{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      25a68e08a5287892022291f0c6ef98684be12838}
+%{!?commit:     %global commit      997846fc4fb3fc99856679aa7407cad644cbc34b}
 # Supplementary files version:
 %{!?suppl_ver:  %global suppl_ver   0.1.2}
 
