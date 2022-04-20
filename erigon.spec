@@ -6,9 +6,9 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.03.02}
+%{!?erigon_ver: %global erigon_ver  2022.04.02}
 %{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      997846fc4fb3fc99856679aa7407cad644cbc34b}
+%{!?commit:     %global commit      d139c750cba2d9ce03e4677d6700b21246c6813f}
 # Supplementary files version:
 %{!?suppl_ver:  %global suppl_ver   0.1.2}
 
@@ -106,6 +106,14 @@ fi
 
 
 %changelog
+* Mon Mar 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.04.02-0%{?dist}
+- Fix for erroneous assert in MDBX
+- Change of skip analysis optimisation parameter
+- (from 2022.04.01) Fix for the integration tool, include reset for the Finish stage
+- (from 2022.04.01) Fix for the tx pool panic whilst working with multiple sentries
+- (from 2022.04.01) Fix for "all defaults" case when calling eth_estimateGas RPC method
+- (from 2022.04.01) Updated all pre-verified hashes for Mainnet, Ropsten, and Sepolia
+
 * Mon Mar 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.03.02-0%{?dist}
 - Bumped the release to pull in patches to LibMDBX
 
