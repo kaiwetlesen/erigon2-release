@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon RPC Daemon - gRPC</short>
+  <description>This port enables gRPC connections to the Erigon RPC service. Enable this port if you intend to use gRPC with Erigon RPCDaemon.</description>
+  <port protocol="tcp" port="8547"/>
+</service>

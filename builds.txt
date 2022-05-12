@@ -1,0 +1,3 @@
+'erigon_ver	2022.04.03','commit	057740ac2019da3a91b1b5110cbf545b432dd758'
+'erigon_ver	2022.04.04','commit	f3065a1149b5a15b6bc450adea842ce9762ef85e'
+'erigon_ver	2022.05.01','commit	b2c531c8bb62d19b9a836a1864a5748f43096614'
