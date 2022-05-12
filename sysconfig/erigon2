@@ -1,0 +1,22 @@
+# ERIGON2 STARTUP OPTIONS
+# This file contains the default startup options for Erigon 2.  By default,
+# Erigon 2 connects to MainNet. See the online Erigon README for documentation
+# of these options: https://github.com/ledgerwatch/erigon/blob/devel/README.md
+
+# Directory in which Erigon 2 should store Ethereum data:
+ERIGON2_DATADIR="/var/lib/erigon2"
+
+# Options set in ERIGON_OPTIONS are passed directly to Erigon 2 on startup:
+ERIGON2_OPTIONS=""
+
+# An example of how use ERIGON2_OPTIONS to connect Erigon 2 to the Goerli test chain:
+#ERIGON2_OPTIONS="--chain goerli"
+
+# Options set in ERIGON2_RPCDAEMON_OPTIONS are passed to the RPC daemon:
+ERIGON2_RPCDAEMON_OPTIONS="--grpc --ws --http.api eth,erigon,web3,trace"
+
+# Options set in ERIGON2_SENTRY_OPTIONS are passed to Sentry:
+ERIGON2_SENTRY_OPTIONS=""
+
+# Options set in ERIGON2_TXPOOL_OPTIONS are passed to TxPool:
+ERIGON2_TXPOOL_OPTIONS=""
