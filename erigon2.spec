@@ -6,17 +6,17 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.04.03}
-%{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      d139c750cba2d9ce03e4677d6700b21246c6813f}
+%{!?pkgver: %global pkgver  2022.04.03}
+%{!?branch: %global branch      stable}
+%{!?commit: %global commit      d139c750cba2d9ce03e4677d6700b21246c6813f}
 # Supplementary files version:
 %{!?suppl_ver:  %global suppl_ver   0.0.1}
 
 Name:           erigon2
 Vendor:         Ledgerwatch
-Version:        %{erigon_ver}
+Version:        %{pkgver}
 Release:        0%{?dist}
-Summary:        A very efficient next-generation Ethereum client
+Summary:        A very efficient next-generation Ethereum execution client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
 
@@ -35,8 +35,8 @@ BuildRequires: gcc-c++ >= 10
 %endif
 
 %description
-An implementation of Ethereum (aka "Ethereum client"), on the efficiency
-frontier, written in Go.
+An implementation of Ethereum (aka "Ethereum execution client"), on the
+efficiency frontier, written in Go, compatible with the proof-of-stake merge.
 
 
 %prep
@@ -73,14 +73,14 @@ cd -
 
 
 %install
-%define erigon_srcdir  %{_builddir}/%{name}-%{version}
+%define build_srcdir  %{_builddir}/%{name}-%{version}
 %define suppl_srcdir   %{_builddir}/%{name}-release-%{suppl_ver}
-%{__install} -m 0755 -D -s   %{erigon_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
-%{__install} -m 0644 -D      %{erigon_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
+%{__install} -m 0755 -D -s   %{build_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
+%{__install} -m 0644 -D      %{build_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
 %{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_prefix}/lib/systemd/system
 %{__install} -m 0644 -D      %{suppl_srcdir}/firewallsvcs/*.xml -t %{buildroot}%{_prefix}/lib/firewalld/services
 %{__install} -m 0644 -D      %{suppl_srcdir}/sysconfig/%{name}  -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}
