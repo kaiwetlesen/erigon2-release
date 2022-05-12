@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
-  <short>Erigon</short>
-  <description>These port sets are the minimum set of ports which must be open for the Erigon client. Enable these ports to run Erigon.</description>
+  <short>Erigon2</short>
+  <description>These port sets are the minimum set of ports which must be open for the Erigon2 client. Enable these ports to run Erigon2.</description>
   <helper name="erigon-peering">
 </service>
