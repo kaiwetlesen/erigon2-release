@@ -2,6 +2,10 @@
 %global debug_package %{nil}
 # TODO: rig up debug package support with golang.
 
+# Upstream, the repo and makefile targets are still called erigon, go account
+# for that:
+%global original_name erigon
+
 # The following conditional determine which version of Erigon we're building. They
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
@@ -21,7 +25,7 @@ License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
 
 # File sources:
-Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/%{vendor}/%{original_name}/archive/refs/tags/v%{version}.tar.gz
 Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
 
 BuildRequires: libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
@@ -56,7 +60,7 @@ fi
 export GIT_BRANCH="%{branch}"
 export GIT_COMMIT="%{commit}"
 export GIT_TAG="v%{version}"
-make %{name} rpcdaemon integration sentry txpool hack pics
+make %{original_name} rpcdaemon integration sentry txpool hack pics
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
@@ -65,6 +69,7 @@ cat %{name}.1.md README.md | go-md2man > %{name}.1
 cd build/bin
 for binary in *; do
     %{__strip} --strip-debug --strip-unneeded ${binary}
+	mv %{original_name} %{name}
     if echo $binary | grep -qv '^%{name}'; then
         %{__mv} ${binary} %{name}-${binary}
     fi
