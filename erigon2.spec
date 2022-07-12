@@ -70,10 +70,12 @@ if [ "${mach}" == 'x86_64' ]; then
     mach='amd64'
 elif [ "${mach}" == 'i386' ] || [ "${mach}" == 'i686' ]; then
     mach='386'
+elif [ "${mach}" == 'aarch64' ]; then
+	mach='arm64'
 fi
-echo "Installing Go v%{spec_go_ver} into /opt/go for the ${mach} platform"
-curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C /opt -xz
-export PATH="/opt/go/bin:${PATH}"
+echo "Installing Go v%{spec_go_ver} into ${PWD}/go for the ${mach} platform"
+curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C ${PWD} -xz
+export PATH="${PWD}/go/bin:${PATH}"
 export GOBIN="/usr/local/bin"
 go install github.com/cpuguy83/go-md2man@latest
 export GIT_BRANCH="%{spec_branch}"
@@ -81,6 +83,8 @@ export GIT_COMMIT="%{spec_commit}"
 export GIT_TAG="v%{version}"
 cd %{_builddir}/%{original_name}-%{version}
 make %{original_name} rpcdaemon integration sentry txpool hack pics
+echo "Cleaning up installed gobin at ${PWD}/go"
+rm -rf ${PWD}/go
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
