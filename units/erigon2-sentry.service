@@ -1,16 +1,16 @@
 [Unit]
-Description=Erigon Sentry
+Description=Erigon2 Sentry
 Documentation=https://github.com/ledgerwatch/erigon/
 
 [Service]
 Type=simple
-EnvironmentFile=-/etc/sysconfig/erigon
-ExecStart=/usr/bin/erigon-sentry --datadir $ERIGON_DATADIR $ERIGON_SENTRY_OPTIONS
+EnvironmentFile=-/etc/sysconfig/erigon2
+ExecStart=/usr/bin/erigon2-sentry --datadir $ERIGON2_DATADIR $ERIGON2_SENTRY_OPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 UMask=0066
 Restart=on-failure
-User=erigon
-Group=erigon
+User=erigon2
+Group=erigon2
 LimitNOFILE=16384
 
 [Install]

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 Sentry</short>
+  <description>This port provides access to the Erigon2 Snapshot Downloader. Enable these if intending to provide snapshot download capability.</description>
+  <port protocol="tcp" port="9093"/>
+</service>

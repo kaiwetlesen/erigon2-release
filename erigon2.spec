@@ -2,30 +2,35 @@
 %global debug_package %{nil}
 # TODO: rig up debug package support with golang.
 
+# Upstream, the repo and makefile targets are still called erigon, go account
+# for that:
+%global original_name erigon
+
 # The following conditional determine which version of Erigon we're building. They
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.04.03}
-%{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      d139c750cba2d9ce03e4677d6700b21246c6813f}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.04.03}
+%define spec_commit %{?commit}%{!?commit:d139c750cba2d9ce03e4677d6700b21246c6813f}
+%define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
-%{!?suppl_ver:  %global suppl_ver   0.0.1}
+%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.1}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.18.3}
 
 Name:           erigon2
 Vendor:         Ledgerwatch
-Version:        %{erigon_ver}
+Version:        %{spec_pkgver}
 Release:        0%{?dist}
-Summary:        A very efficient next-generation Ethereum client
+Summary:        A very efficient next-generation Ethereum execution client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
 
 # File sources:
-Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
-Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
+Source0:        https://github.com/%{vendor}/%{original_name}/archive/refs/tags/v%{version}.tar.gz
+Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{spec_suppl_ver}.tar.gz
 
-BuildRequires: libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
-BuildRequires: golang >= 1.16
+BuildRequires: libmdbx-devel, binutils, git, curl
+#BuildRequires: golang >= 1.16
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
@@ -35,34 +40,54 @@ BuildRequires: gcc-c++ >= 10
 %endif
 
 %description
-An implementation of Ethereum (aka "Ethereum client"), on the efficiency
-frontier, written in Go.
+An implementation of Ethereum (aka "Ethereum execution client"), on the
+efficiency frontier, written in Go, compatible with the proof-of-stake merge.
 
 
 %prep
 # Build fails with GCC Go, so die unless we can set that alternative:
-if go version | grep -i gcc; then
-    echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
-    exit -1
-fi
-%autosetup -b 0
-%autosetup -b 1
+%autosetup -b 1 -n %{name}-release-%{spec_suppl_ver}
+%autosetup -b 0 -n %{original_name}-%{version}
+# Apply git attributes to release code:
+git clone --bare --depth 1 -b v%{version} https://github.com/%{vendor}/%{original_name}.git .git
+git init
+git checkout -f -b %{spec_branch} tags/v%{version}
+
+# Clone these two guys into the Erigon code:
+#git clone https://github.com/ledgerwatch/erigon-snapshot.git turbo/snapshotsync/snapshothashes/erigon-snapshots
+#git clone https://github.com/ngosang/trackerslist.git cmd/downloader/trackers/trackerslist
+#sed -e 's/-buildvcs=false//g' Makefile > Makefile.new && mv -f Makefile.new Makefile
 
 
 %build
-%if "%{?rhel}" != ""
+if [ -f /opt/rh/gcc-toolset-10/enable ]; then
     . /opt/rh/gcc-toolset-10/enable
-%endif
-export GIT_BRANCH="%{branch}"
-export GIT_COMMIT="%{commit}"
+    echo "Enabled GCC toolchain v10 for RedHat systems"
+fi
+export mach=$(uname -m | tr '[A-Z]' '[a-z]')
+# Map a few choice platforms:
+if [ "${mach}" == 'x86_64' ]; then
+    mach='amd64'
+elif [ "${mach}" == 'i386' ] || [ "${mach}" == 'i686' ]; then
+    mach='386'
+fi
+echo "Installing Go v%{spec_go_ver} into /opt/go for the ${mach} platform"
+curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C /opt -xz
+export PATH="/opt/go/bin:${PATH}"
+export GOBIN="/usr/local/bin"
+go install github.com/cpuguy83/go-md2man@latest
+export GIT_BRANCH="%{spec_branch}"
+export GIT_COMMIT="%{spec_commit}"
 export GIT_TAG="v%{version}"
-make %{name} rpcdaemon integration sentry txpool hack pics
+cd %{_builddir}/%{original_name}-%{version}
+make %{original_name} rpcdaemon integration sentry txpool hack pics
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
 %{__rm} %{name}.1.md
-# Rename binaries with common names to %{name}_{binary} scheme:
+# Rename binaries with common names to [name]-[binary] scheme:
 cd build/bin
+mv %{original_name} %{name}
 for binary in *; do
     %{__strip} --strip-debug --strip-unneeded ${binary}
     if echo $binary | grep -qv '^%{name}'; then
@@ -73,14 +98,14 @@ cd -
 
 
 %install
-%define erigon_srcdir  %{_builddir}/%{name}-%{version}
-%define suppl_srcdir   %{_builddir}/%{name}-release-%{suppl_ver}
-%{__install} -m 0755 -D -s   %{erigon_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
-%{__install} -m 0644 -D      %{erigon_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
+%define build_srcdir  %{_builddir}/%{original_name}-%{version}
+%define suppl_srcdir   %{_builddir}/%{name}-release-%{spec_suppl_ver}
+%{__install} -m 0755 -D -s   %{build_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
+%{__install} -m 0644 -D      %{build_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
 %{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_prefix}/lib/systemd/system
 %{__install} -m 0644 -D      %{suppl_srcdir}/firewallsvcs/*.xml -t %{buildroot}%{_prefix}/lib/firewalld/services
 %{__install} -m 0644 -D      %{suppl_srcdir}/sysconfig/%{name}  -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}

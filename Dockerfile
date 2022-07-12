@@ -1,15 +1,11 @@
-FROM rockylinux
-
-WORKDIR /root
+FROM rockylinux:8
 
 RUN dnf -y install epel-release dnf-plugins-core rpmdevtools 'dnf-command(copr)'
 RUN dnf -y copr enable kwetlesen/libmdbx
 RUN rpmdev-setuptree
 RUN dnf -y upgrade
 
-COPY ./buildrpm.sh /root/buildrpm.sh
-COPY ./erigon2.spec /root/erigon2.spec
-RUN dnf -y builddep /root/erigon2.spec
+WORKDIR /root/build
+COPY . .
 
-#CMD [ "/bin/bash", "/root/buildrpm.sh", "/root/erigon2.spec" ]
-CMD [ "/bin/bash" ]
+CMD [ "/root/build/buildrpm.sh", "--buildvarsfile", "/root/build/builds.txt", "erigon2.spec" ]

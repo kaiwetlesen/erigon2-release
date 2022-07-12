@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 Metrics</short>
+  <description>Erigon2 metrics default port. Generally used to serve Prometheus and PProf metrics on 6060 and 6061 respectively.</description>
+  <port protocol="tcp" port="6060"/>
+  <port protocol="tcp" port="6061"/>
+</service>

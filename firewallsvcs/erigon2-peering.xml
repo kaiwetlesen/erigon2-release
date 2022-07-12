@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
-  <short>Erigon Peering</short>
-  <description>These ports are used by Erigon for peer connections with the Ethereum network. Enable these ports for any system which will participate in an Ethereum network.</description>
+  <short>Erigon2 Peering</short>
+  <description>These ports are used by Erigon2 for peer connections with the Ethereum network. Enable these ports for any system which will participate in an Ethereum network.</description>
   <!-- Eth/66 Peering: -->
   <port protocol="tcp" port="30303"/>
   <port protocol="udp" port="30303"/>
