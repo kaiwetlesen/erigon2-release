@@ -14,7 +14,7 @@
 %define spec_commit %{?commit}%{!?commit:c7a94eeea05d7c0d569c811399642a7d108d8c82}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
-%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.1}
+%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.2}
 %define spec_go_ver %{?go_ver}%{!?go_ver:1.18.3}
 
 Name:           erigon2
