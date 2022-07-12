@@ -84,7 +84,8 @@ export GIT_TAG="v%{version}"
 cd %{_builddir}/%{original_name}-%{version}
 make %{original_name} rpcdaemon integration sentry txpool hack pics
 echo "Cleaning up installed gobin at ${PWD}/go"
-rm -rf ${PWD}/go
+chmod -R ug+w ${GOPATH}
+rm -rf ${GOPATH}
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
