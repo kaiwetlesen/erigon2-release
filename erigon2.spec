@@ -75,8 +75,8 @@ elif [ "${mach}" == 'aarch64' ]; then
 fi
 echo "Installing Go v%{spec_go_ver} into ${PWD}/go for the ${mach} platform"
 curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C ${PWD} -xz
-export PATH="${PWD}/go/bin:${PATH}"
-export GOBIN="/usr/local/bin"
+export GOPATH="${PWD}/go"
+export PATH="${GOPATH}/bin:${PATH}"
 go install github.com/cpuguy83/go-md2man@latest
 export GIT_BRANCH="%{spec_branch}"
 export GIT_COMMIT="%{spec_commit}"
