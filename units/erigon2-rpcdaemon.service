@@ -6,7 +6,7 @@ Documentation=https://github.com/ledgerwatch/erigon/
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/erigon2
-ExecStart=/usr/bin/erigon2-rpcdaemon --datadir $ERIGON_DATADIR $ERIGON_RPCDAEMON_OPTIONS
+ExecStart=/usr/bin/erigon2-rpcdaemon --datadir $ERIGON2_DATADIR $ERIGON2_RPCDAEMON_OPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 UMask=0066
 Restart=on-failure
