@@ -10,8 +10,8 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.04.03}
-%define spec_commit %{?commit}%{!?commit:d139c750cba2d9ce03e4677d6700b21246c6813f}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.07.02}
+%define spec_commit %{?commit}%{!?commit:c7a94eeea05d7c0d569c811399642a7d108d8c82}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.1}
@@ -131,5 +131,10 @@ fi
 
 
 %changelog
+* Tue Jul 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.02-0%{?dist}
+- Major revamp of build specification
+- GoLang now must be pulled independently due to lack of available v1.19 in RL8
+- Renamed all services from Erigon to Erigon2
+- Bumped build version to v2022.07.02
 * Tue May 3 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.04.03-0%{?dist}
 - First Erigon2 RPM release
