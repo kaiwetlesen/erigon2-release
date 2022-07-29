@@ -65,6 +65,7 @@ if [ -f /opt/rh/gcc-toolset-10/enable ]; then
     echo "Enabled GCC toolchain v10 for RedHat systems"
 fi
 export mach=$(uname -m | tr '[A-Z]' '[a-z]')
+echo "Detected machine architecture ${mach}"
 # Map a few choice platforms:
 if [ "${mach}" == 'x86_64' ]; then
     mach='amd64'
@@ -72,6 +73,11 @@ elif [ "${mach}" == 'i386' ] || [ "${mach}" == 'i686' ]; then
     mach='386'
 elif [ "${mach}" == 'aarch64' ]; then
 	mach='arm64'
+else
+	no_tx='notx'
+fi
+if ! [ "$no_tx" = 'notx' ]; then
+	echo "Translated seen machine architecture to ${mach}"
 fi
 echo "Installing Go v%{spec_go_ver} into ${PWD}/go for the ${mach} platform"
 curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C ${PWD} -xz
