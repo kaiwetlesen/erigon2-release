@@ -10,7 +10,7 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.07.02}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.07.03}
 %define spec_commit %{?commit}%{!?commit:c7a94eeea05d7c0d569c811399642a7d108d8c82}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
@@ -141,6 +141,8 @@ fi
 
 
 %changelog
+* Fri Jul 29 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.03-0%{?dist}
+- Bumped Erigon version to v2022.07.03
 * Tue Jul 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.02-0%{?dist}
 - Major revamp of build specification
 - GoLang now must be pulled independently due to lack of available v1.19 in RL8
