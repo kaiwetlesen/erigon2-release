@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<service>
-  <short>Erigon2 Sentry</short>
-  <description>This ports are used by TxPool to serve out RPC connections proxied from the Sentry processes. Enable this port if using Sentry and TxPool.</description>
-  <port protocol="tcp" port="9094"/>
-</service>

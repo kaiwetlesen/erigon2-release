@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<service>
-  <short>Erigon2 Sentry</short>
-  <description>This port hosts a separate consensus engine for Erigon2 to connect with in preparation for the Ethereum fork. Enable these if intending to use Erigon2 with the new Ethereum fork.</description>
-  <port protocol="tcp" port="9092"/>
-</service>
