@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 Downloader API</short>
+  <description>This service exposes the Erigon2 Downloader internal API, facilitating inter-process connections between Downloader and the Erigon2 client. Enable this service if intending to use or provide snapshot download capability in a different process or on a separate machine from Erigon2.</description>
+  <port protocol="tcp" port="9093"/>
+</service>

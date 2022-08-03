@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 Peering - Downloader</short>
+  <description>This service provides access to the Erigon2 Downloader torrent client. Enable these if intending to use or provide state snapshot download capability.</description>
+  <port protocol="tcp" port="42069"/>
+  <port protocol="udp" port="42069"/>
+</service>

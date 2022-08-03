@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 RPC - JSON-RPC</short>
+  <description>The main Erigon2 RPC service port, facilitates JSON-RPC queries to Erigon2 via the RPC daemon. Enable this port for JSON-RPC connections to Erigon2 RPCDaemon or the built-in Erigon RPC server. This service is typically private between the Erigon RPC and a consensus client.</description>
+  <port protocol="tcp" port="8545"/>
+</service>

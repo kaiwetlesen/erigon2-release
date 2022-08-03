@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 RPC - Consensus Engine</short>
+  <description>This service hosts a separate consensus engine RPC endpoint for Erigon2 to enable connections from a consensus client. Enable this service permitting connections only from an established consensus client. This service is required if intending to use Erigon2 with a consensus client, which is required for Ethereum proof-of-stake.</description>
+  <port protocol="tcp" port="8551"/>
+</service>

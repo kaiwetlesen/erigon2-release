@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 RPC</short>
+  <description>The default set of Erigon2 RPC services, facilitates RPC queries to Erigon2. Enable this service to permit access to Erigon2 Ethereum RPC services. This currently includes the JSON-RPC and gRPC endpoints.</description>
+  <include service="erigon2-rpc-jsonrpc"/>
+  <include service="erigon2-rpc-grpc"/>
+</service>

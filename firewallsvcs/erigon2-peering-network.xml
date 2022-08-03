@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon2 Peering - Network</short>
+  <description>This service is used by Erigon2 for peer connections to an Ethereum-compatible network. Enable this service to participate in an Ethereum-compatible network.</description>
+  <!-- Eth/66 Peering: -->
+  <port protocol="tcp" port="30303"/>
+  <port protocol="udp" port="30303"/>
+  <!-- Eth/65 Peering: -->
+  <port protocol="tcp" port="30304"/>
+  <port protocol="udp" port="30304"/>
+</service>
