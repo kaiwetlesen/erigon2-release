@@ -10,12 +10,15 @@
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.07.03}
-%define spec_commit %{?commit}%{!?commit:c7a94eeea05d7c0d569c811399642a7d108d8c82}
+# Current values:
+# GIT_TAG=v2022.07.04
+# GIT_COMMIT=0977639431fe520fc77399d03cdeba36526d2d52
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.07.04}
+%define spec_commit %{?commit}%{!?commit:0977639431fe520fc77399d03cdeba36526d2d52}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
-%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.2}
-%define spec_go_ver %{?go_ver}%{!?go_ver:1.18.3}
+%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.18.5}
 
 Name:           erigon2
 Vendor:         Ledgerwatch
@@ -88,7 +91,7 @@ export GIT_BRANCH="%{spec_branch}"
 export GIT_COMMIT="%{spec_commit}"
 export GIT_TAG="v%{version}"
 cd %{_builddir}/%{original_name}-%{version}
-make %{original_name} rpcdaemon integration sentry txpool hack pics
+make %{original_name} rpcdaemon sentry txpool downloader cons hack state integration observer rpctest
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
@@ -141,6 +144,11 @@ fi
 
 
 %changelog
+* Mon Aug 2 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.04-0%{?dist}
+- Bumped Erigon version to v2022.07.04
+- Bumped GoLang version to patch v1.18.5
+- Updated firewall rules to better reflect true purpose
+- Included additional useful utilities and daemons in bundle
 * Fri Jul 29 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.03-0%{?dist}
 - Bumped Erigon version to v2022.07.03
 * Tue Jul 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.02-0%{?dist}
