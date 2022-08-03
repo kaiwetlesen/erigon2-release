@@ -1,5 +1,5 @@
 [Unit]
-Description=Erigon2 Ethereum Client
+Description=Erigon2 Ethereum Client - A complete Ethereum compatible execution client and RPC endpoint
 Requires=network.target
 Documentation=man:erigon2(1)
 Documentation=https://github.com/ledgerwatch/erigon/
