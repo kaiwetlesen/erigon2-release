@@ -18,3 +18,4 @@
 'pkgver 2022.07.02','commit c7a94eeea05d7c0d569c811399642a7d108d8c82'
 'pkgver 2022.07.03','commit af9f49ece7009fb62329c04e21bd3f807f6bd639'
 'pkgver 2022.07.04','commit d88fc8242789a5f6df0ce77168e473715178d6df'
+'pkgver 2022.08.01','commit 7dabdc3269f1e3b098fee5ab4d96ec843823a6fd'
