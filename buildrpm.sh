@@ -28,7 +28,7 @@ if [ -f "$buildvars" ]; then
 	while read build; do
 		version="$(echo "$build" | cut -d, -f1 | tr -d \')"
 		commit="$(echo "$build" | cut -d, -f2 | tr -d \')"
-		spectool --debug --get-files --all --sourcedir --define="$version" --define="$commit" $spec # &
+		spectool --debug --get-files --all --sourcedir --define="$version" --define="$commit" $spec
 	done < $buildvars
 	wait
 	echo '----------------------- Running builds -----------------------'
@@ -39,6 +39,7 @@ if [ -f "$buildvars" ]; then
 	done < builds.txt
 	wait
 else
+	spectool --debug --get-files --all --sourcedir $spec
 	rpmbuild -bb $spec
 fi
 chmod -R a+r ${HOME}/rpmbuild/RPMS
