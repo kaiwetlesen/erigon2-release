@@ -8,8 +8,6 @@ if [ "$1" == "--buildvarsfile" ]; then
 		echo 'Option "--buildvars" provided but does not point to a valid file'
 		exit 1
 	fi
-else
-	echo "something: $1"
 fi
 spec=$1
 if [ ! -f "$spec" ]; then
