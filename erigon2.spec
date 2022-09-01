@@ -13,12 +13,12 @@
 # Current values:
 # GIT_TAG=v2022.08.02
 # GIT_COMMIT=35c4faa1b41e8379a74d0385505add0dd450c2ed
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.08.02}
-%define spec_commit %{?commit}%{!?commit:35c4faa1b41e8379a74d0385505add0dd450c2ed}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.08.03}
+%define spec_commit %{?commit}%{!?commit:defbddf8d64718c71ec24c408f31c7f28ecf3e9e}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
-%define spec_go_ver %{?go_ver}%{!?go_ver:1.18.5}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.19}
 
 Name:           erigon2
 Vendor:         Ledgerwatch
@@ -144,6 +144,9 @@ fi
 
 
 %changelog
+* Thu Sep 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.03-0%{?dist}
+- Bumped Erigon version to v2022.08.03
+- Bumped Go toolchain version to v1.19
 * Tue Aug 16 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.02-0%{?dist}
 - Bumped Erigon version to v2022.08.02
 * Tue Aug 9 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.01-0%{?dist}
