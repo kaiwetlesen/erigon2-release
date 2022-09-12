@@ -23,7 +23,7 @@
 Name:           erigon2
 Vendor:         Ledgerwatch
 Version:        %{spec_pkgver}
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        A very efficient next-generation Ethereum execution client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
@@ -91,7 +91,7 @@ export GIT_BRANCH="%{spec_branch}"
 export GIT_COMMIT="%{spec_commit}"
 export GIT_TAG="v%{version}"
 cd %{_builddir}/%{original_name}-%{version}
-make %{original_name} rpcdaemon sentry txpool downloader cons hack state integration observer rpctest
+make %{original_name} rpcdaemon sentry txpool downloader hack state integration observer rpctest
 echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
 cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
@@ -144,6 +144,9 @@ fi
 
 
 %changelog
+* Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-1%{?dist}
+- Removed the deprecated `cons' binary
+- Corrected bogus spec date
 * Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-0%{?dist}
 - Bumped Erigon version to v2022.09.01
 * Thu Sep 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.03-0%{?dist}
@@ -153,7 +156,7 @@ fi
 - Bumped Erigon version to v2022.08.02
 * Tue Aug 9 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.01-0%{?dist}
 - Bumped Erigon version to v2022.08.01
-* Mon Aug 2 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.04-0%{?dist}
+* Tue Aug 2 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.04-0%{?dist}
 - Bumped Erigon version to v2022.07.04
 - Bumped GoLang version to patch v1.18.5
 - Updated firewall rules to better reflect true purpose
