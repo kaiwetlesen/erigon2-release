@@ -13,8 +13,8 @@
 # Current values:
 # GIT_TAG=v2022.08.02
 # GIT_COMMIT=35c4faa1b41e8379a74d0385505add0dd450c2ed
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.08.03}
-%define spec_commit %{?commit}%{!?commit:defbddf8d64718c71ec24c408f31c7f28ecf3e9e}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.01}
+%define spec_commit %{?commit}%{!?commit:4067b7c4da6c5d741d3027d95ae2afdf6b7a943a}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
