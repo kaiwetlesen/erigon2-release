@@ -16,3 +16,5 @@ default service port definitions to plug into FirewallD.
 Configuration options are stored into `/etc/sysconfig/erigon2` and are
 identical to the command line configuration options that one would typically
 use to start Erigon2.
+
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/kwetlesen/Erigon/package/erigon2/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/kwetlesen/Erigon/package/erigon2/)
