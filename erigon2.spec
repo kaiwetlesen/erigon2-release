@@ -144,6 +144,8 @@ fi
 
 
 %changelog
+* Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-0%{?dist}
+- Bumped Erigon version to v2022.09.01
 * Thu Sep 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.03-0%{?dist}
 - Bumped Erigon version to v2022.08.03
 - Bumped Go toolchain version to v1.19
