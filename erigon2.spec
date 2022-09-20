@@ -13,12 +13,12 @@
 # Current values:
 # GIT_TAG=v2022.08.02
 # GIT_COMMIT=35c4faa1b41e8379a74d0385505add0dd450c2ed
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.01}
-%define spec_commit %{?commit}%{!?commit:4067b7c4da6c5d741d3027d95ae2afdf6b7a943a}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.02}
+%define spec_commit %{?commit}%{!?commit:38b35e09fe8e2249f22570f60cf9407b05fc2b49}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
-%define spec_go_ver %{?go_ver}%{!?go_ver:1.19}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.19.1}
 
 Name:           erigon2
 Vendor:         Ledgerwatch
@@ -33,7 +33,6 @@ Source0:        https://github.com/%{vendor}/%{original_name}/archive/refs/tags/
 Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{spec_suppl_ver}.tar.gz
 
 BuildRequires: libmdbx-devel, binutils, git, curl
-#BuildRequires: golang >= 1.16
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
@@ -144,6 +143,9 @@ fi
 
 
 %changelog
+* Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.02-0%{?dist}
+- Building Erigon v2022.09.02, soon to be followed by v2022.09.03
+- Bumped GoLang version to v1.19.1
 * Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-1%{?dist}
 - Removed the deprecated `cons' binary
 - Corrected bogus spec date
