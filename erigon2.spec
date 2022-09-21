@@ -13,8 +13,8 @@
 # Current values:
 # GIT_TAG=v2022.08.02
 # GIT_COMMIT=35c4faa1b41e8379a74d0385505add0dd450c2ed
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.02}
-%define spec_commit %{?commit}%{!?commit:38b35e09fe8e2249f22570f60cf9407b05fc2b49}
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.03}
+%define spec_commit %{?commit}%{!?commit:32bd69e5316050005e34448ec6b0165f97173d50}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
@@ -143,6 +143,8 @@ fi
 
 
 %changelog
+* Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.03-0%{?dist}
+- Building Erigon v2022.09.03
 * Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.02-0%{?dist}
 - Building Erigon v2022.09.02, soon to be followed by v2022.09.03
 - Bumped GoLang version to v1.19.1
