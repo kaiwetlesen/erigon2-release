@@ -78,7 +78,7 @@ elif [ "${mach}" == 'aarch64' ]; then
 else
 	go_mach='unknown'
 fi
-if ! [ "$go_mach" = 'unknown' ]; then
+if [ "$go_mach" == 'unknown' ]; then
 	echo "No known Go-machine match for architecture ${mach}"
 	exit -1
 fi
