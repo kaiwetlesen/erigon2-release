@@ -70,19 +70,20 @@ export mach=$(uname -m | tr '[A-Z]' '[a-z]')
 echo "Detected machine architecture ${mach}"
 # Map a few choice platforms:
 if [ "${mach}" == 'x86_64' ]; then
-    mach='amd64'
+    go_mach='amd64'
 elif [ "${mach}" == 'i386' ] || [ "${mach}" == 'i686' ]; then
-    mach='386'
+    go_mach='386'
 elif [ "${mach}" == 'aarch64' ]; then
-	mach='arm64'
+	go_mach='arm64'
 else
-	no_tx='notx'
+	go_mach='unknown'
 fi
-if ! [ "$no_tx" = 'notx' ]; then
-	echo "Translated seen machine architecture to ${mach}"
+if ! [ "$go_mach" = 'unknown' ]; then
+	echo "No known Go-machine match for architecture ${mach}"
+	exit -1
 fi
-echo "Installing Go v%{spec_go_ver} into ${PWD}/go for the ${mach} platform"
-curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${mach}.tar.gz | tar -C ${PWD} -xz
+echo "Installing Go v%{spec_go_ver}.${go_mach} into ${PWD}/go for the ${mach} platform"
+curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${go_mach}.tar.gz | tar -C ${PWD} -xz
 export GOPATH="${PWD}/go"
 export PATH="${GOPATH}/bin:${PATH}"
 go install github.com/cpuguy83/go-md2man@latest
