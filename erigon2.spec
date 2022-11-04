@@ -11,10 +11,10 @@
 
 # Erigon version, buildable branch, & commit hash:
 # Current values:
-# GIT_TAG=v2022.08.02
-# GIT_COMMIT=35c4faa1b41e8379a74d0385505add0dd450c2ed
-%define spec_pkgver %{?pkgver}%{!?pkgver:2022.09.03}
-%define spec_commit %{?commit}%{!?commit:32bd69e5316050005e34448ec6b0165f97173d50}
+# GIT_TAG=v2022.10.01
+# GIT_COMMIT=d0337242c6e5913553e9e1c0949be1e5e871e01e
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.10.01}
+%define spec_commit %{?commit}%{!?commit:d0337242c6e5913553e9e1c0949be1e5e871e01e}
 %define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
@@ -144,30 +144,35 @@ fi
 
 
 %changelog
+* Fri Nov 4 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.10.01-0%{?dist}
+- Bumping to Erigon2 to version 2022.10.01
+- Bumping GoLang version to v1.19.3
+- Final release of the Erigon2 package as we transition to semver
+- New Erigon packages will continue under the `erigon` namespace
 * Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.03-0%{?dist}
-- Building Erigon v2022.09.03
+- Building Erigon2 v2022.09.03
 * Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.02-0%{?dist}
-- Building Erigon v2022.09.02, soon to be followed by v2022.09.03
+- Building Erigon2 v2022.09.02, soon to be followed by v2022.09.03
 - Bumped GoLang version to v1.19.1
 * Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-1%{?dist}
 - Removed the deprecated `cons' binary
 - Corrected bogus spec date
 * Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-0%{?dist}
-- Bumped Erigon version to v2022.09.01
+- Bumped Erigon2 version to v2022.09.01
 * Thu Sep 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.03-0%{?dist}
-- Bumped Erigon version to v2022.08.03
+- Bumped Erigon2 version to v2022.08.03
 - Bumped Go toolchain version to v1.19
 * Tue Aug 16 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.02-0%{?dist}
-- Bumped Erigon version to v2022.08.02
+- Bumped Erigon2 version to v2022.08.02
 * Tue Aug 9 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.01-0%{?dist}
-- Bumped Erigon version to v2022.08.01
+- Bumped Erigon2 version to v2022.08.01
 * Tue Aug 2 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.04-0%{?dist}
-- Bumped Erigon version to v2022.07.04
+- Bumped Erigon2 version to v2022.07.04
 - Bumped GoLang version to patch v1.18.5
 - Updated firewall rules to better reflect true purpose
 - Included additional useful utilities and daemons in bundle
 * Fri Jul 29 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.03-0%{?dist}
-- Bumped Erigon version to v2022.07.03
+- Bumped Erigon2 version to v2022.07.03
 * Tue Jul 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.02-0%{?dist}
 - Major revamp of build specification
 - GoLang now must be pulled independently due to lack of available v1.19 in RL8
