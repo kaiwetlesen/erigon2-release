@@ -118,7 +118,7 @@ cd -
 %{__install} -m 0644 -D      %{build_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
 %{__install} -m 0644 -D      %{build_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
 %{__install} -m 0644 -D      %{build_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
-%{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_unitdir}
+%{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_prefix}/lib/systemd/system
 %{__install} -m 0644 -D      %{suppl_srcdir}/firewallsvcs/*.xml -t %{buildroot}%{_prefix}/lib/firewalld/services
 %{__install} -m 0644 -D      %{suppl_srcdir}/sysconfig/%{name}  -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
@@ -128,7 +128,7 @@ cd -
 %doc README.md TESTING.md
 %{_bindir}/*
 %{_mandir}/man1/%{name}.1.gz
-%{_unitdir}/*
+%{_prefix}/lib/systemd/system/*
 %{_prefix}/lib/firewalld/services/*
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
