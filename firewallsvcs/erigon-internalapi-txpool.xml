@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon TxPool API</short>
+  <description>This service exposes the Erigon TxPool internal API, enabling inter-process connections from Sentry and the Erigon client to TxPool. Enable this port in the correct zone if intending to use TxPool and Sentry as separate processes or on a separate machine from Erigon.</description>
+  <port protocol="tcp" port="9094"/>
+</service>

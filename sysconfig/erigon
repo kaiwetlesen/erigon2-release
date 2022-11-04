@@ -1,7 +1,7 @@
 # ERIGON STARTUP OPTIONS
 # This file contains the default startup options for Erigon.  By default,
-# Erigon connects to MainNet.  See the Erigon Github for documentation of these
-# options.
+# Erigon connects to MainNet. See the online Erigon README for documentation
+# of these options: https://github.com/ledgerwatch/erigon/blob/devel/README.md
 
 # Directory in which Erigon should store Ethereum data:
 ERIGON_DATADIR="/var/lib/erigon"

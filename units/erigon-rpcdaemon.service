@@ -1,5 +1,5 @@
 [Unit]
-Description=Erigon RPC Daemon
+Description=Erigon RPC Daemon - Ethereum (and compatible) RPC Server running outside Erigon
 Requires=erigon.service
 Documentation=https://github.com/ledgerwatch/erigon/
 

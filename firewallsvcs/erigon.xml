@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>Erigon</short>
-  <description>These port sets are the minimum set of ports which must be open for the Erigon client. Enable these ports to run Erigon.</description>
-  <helper name="erigon-peering">
+  <description>
+    These services are the recommended set of services which should be open to
+    operate a fully functional Erigon client. This currently includes all ports
+    to operate the peering and snapshot downloader mechanisms, as well as both
+    the JSON-RPC and gRPC services. Enable these ports to run Erigon in a
+    default configuration.
+
+    Note: those operating a public facing Erigon node may prefer to proxy or
+    otherwise restrict access to the RPC services as running Erigon represents
+    a considerable investment. For those persons, it is recommended to enable
+    the `erigon-peering` service only and let the RPC services reside behind
+    the firewall.
+  </description>
+  <include service="erigon-peering"/>
+  <include service="erigon-rpc"/>
 </service>

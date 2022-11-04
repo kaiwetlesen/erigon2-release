@@ -2,30 +2,37 @@
 %global debug_package %{nil}
 # TODO: rig up debug package support with golang.
 
+# Upstream, the repo and makefile targets are still called erigon, go account
+# for that:
+%global original_name erigon
+
 # The following conditional determine which version of Erigon we're building. They
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
 # Erigon version, buildable branch, & commit hash:
-%{!?erigon_ver: %global erigon_ver  2022.04.02}
-%{!?branch:     %global branch      stable}
-%{!?commit:     %global commit      d139c750cba2d9ce03e4677d6700b21246c6813f}
+# Current values:
+# GIT_TAG=v2022.10.01
+# GIT_COMMIT=d0337242c6e5913553e9e1c0949be1e5e871e01e
+%define spec_pkgver %{?pkgver}%{!?pkgver:2022.10.01}
+%define spec_commit %{?commit}%{!?commit:d0337242c6e5913553e9e1c0949be1e5e871e01e}
+%define spec_branch %{?branch}%{!?branch:%{original_name}-v%{spec_pkgver}}
 # Supplementary files version:
-%{!?suppl_ver:  %global suppl_ver   0.1.2}
+%define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.0.3}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.19.1}
 
 Name:           erigon
 Vendor:         Ledgerwatch
-Version:        %{erigon_ver}
+Version:        %{spec_pkgver}
 Release:        1%{?dist}
-Summary:        A very efficient Ethereum client
+Summary:        A very efficient next-generation Ethereum execution client
 License:        LGPLv3
 URL:            https://github.com/ledgerwatch/erigon
 
 # File sources:
 Source0:        https://github.com/%{vendor}/%{name}/archive/refs/tags/v%{version}.tar.gz
-Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{suppl_ver}.tar.gz
+Source1:        https://github.com/kaiwetlesen/%{name}-release/archive/refs/tags/v%{spec_suppl_ver}.tar.gz
 
-BuildRequires: libmdbx-devel, binutils, git, golang-github-cpuguy83-md2man
-BuildRequires: golang >= 1.16
+BuildRequires: libmdbx-devel, binutils, git, curl
 %if "%{dist}" == ".el8"
 BuildRequires: gcc-toolset-10-gcc
 BuildRequires: gcc-toolset-10-gcc-c++
@@ -35,53 +42,84 @@ BuildRequires: gcc-c++ >= 10
 %endif
 
 %description
-An implementation of Ethereum (aka "Ethereum client"), on the efficiency
-frontier, written in Go.
+An implementation of Ethereum (aka "Ethereum execution client"), on the
+efficiency frontier, written in Go, compatible with the proof-of-stake merge.
 
 
 %prep
 # Build fails with GCC Go, so die unless we can set that alternative:
-if go version | grep -i gcc; then
-    echo 'Cannot build with GCC-Go! Run "alternatives --config go" and select the official Go binary or remove GCC-Go before rerunning this build!'
-    exit -1
-fi
-%autosetup -b 0
-%autosetup -b 1
+%autosetup -b 1 -n %{name}-release-%{spec_suppl_ver}
+%autosetup -b 0 -n %{name}-%{version}
+# Apply git attributes to release code:
+git clone --bare --depth 1 -b v%{version} https://github.com/%{vendor}/%{name}.git .git
+git init
+git checkout -f -b ${name}-v%{version} tags/v%{version}
+
+# Clone these two guys into the Erigon code:
+#git clone https://github.com/ledgerwatch/erigon-snapshot.git turbo/snapshotsync/snapshothashes/erigon-snapshots
+#git clone https://github.com/ngosang/trackerslist.git cmd/downloader/trackers/trackerslist
+#sed -e 's/-buildvcs=false//g' Makefile > Makefile.new && mv -f Makefile.new Makefile
 
 
 %build
-%if "%{?rhel}" != ""
+if [ -f /opt/rh/gcc-toolset-10/enable ]; then
     . /opt/rh/gcc-toolset-10/enable
-%endif
-export GIT_BRANCH="%{branch}"
-export GIT_COMMIT="%{commit}"
+    echo "Enabled GCC toolchain v10 for RedHat systems"
+fi
+export mach=$(uname -m | tr '[A-Z]' '[a-z]')
+echo "Detected machine architecture ${mach}"
+# Map a few choice platforms:
+if [ "${mach}" == 'x86_64' ]; then
+    go_mach='amd64'
+elif [ "${mach}" == 'i386' ] || [ "${mach}" == 'i686' ]; then
+    go_mach='386'
+elif [ "${mach}" == 'aarch64' ]; then
+	go_mach='arm64'
+else
+	go_mach='unknown'
+fi
+if [ "$go_mach" == 'unknown' ]; then
+	echo "No known Go-machine match for architecture ${mach}"
+	exit -1
+fi
+echo "Installing Go v%{spec_go_ver}.${go_mach} into ${PWD}/go for the ${mach} platform"
+curl -sL https://go.dev/dl/go%{spec_go_ver}.linux-${go_mach}.tar.gz | tar -C ${PWD} -xz
+export GOPATH="${PWD}/go"
+export PATH="${GOPATH}/bin:${PATH}"
+go install github.com/cpuguy83/go-md2man@latest
+export GIT_BRANCH="%{name}-v%{version}"
+export GIT_COMMIT="%{spec_commit}"
 export GIT_TAG="v%{version}"
-make %{name} rpcdaemon integration sentry txpool hack pics
-echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > erigon.1.md
-cat erigon.1.md README.md | go-md2man > %{name}.1
+cd %{_builddir}/%{name}-%{version}
+make %{name} rpcdaemon sentry txpool downloader hack state integration observer rpctest
+echo '# "%{name}" 1 "%{summary}" %{vendor} "User Manuals"' > %{name}.1.md
+cat %{name}.1.md README.md | go-md2man > %{name}.1
 %{__gzip} %{name}.1
 %{__rm} %{name}.1.md
-# Rename binaries with common names to %{name}_{binary} scheme:
+# Rename binaries with common names to [name]-[binary] scheme:
 cd build/bin
+mv %{name} %{name}
 for binary in *; do
     %{__strip} --strip-debug --strip-unneeded ${binary}
     if echo $binary | grep -qv '^%{name}'; then
         %{__mv} ${binary} %{name}-${binary}
     fi
 done
+chmod -R ug+w ${GOPATH}
+rm -rf ${GOPATH}
 cd -
 
 
 %install
-%define erigon_srcdir  %{_builddir}/%{name}-%{version}
-%define suppl_srcdir   %{_builddir}/%{name}-release-%{suppl_ver}
-%{__install} -m 0755 -D -s   %{erigon_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
-%{__install} -m 0644 -D      %{erigon_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
-%{__install} -m 0644 -D      %{erigon_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
-%{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_prefix}/lib/systemd/system
+%define build_srcdir  %{_builddir}/%{name}-%{version}
+%define suppl_srcdir   %{_builddir}/%{name}-release-%{spec_suppl_ver}
+%{__install} -m 0755 -D -s   %{build_srcdir}/build/bin/*       -t %{buildroot}%{_bindir}
+%{__install} -m 0644 -D      %{build_srcdir}/README.md         -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/TESTING.md        -t %{buildroot}%{_datadir}/doc/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/COPYING*          -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/AUTHORS           -t %{buildroot}%{_datadir}/licenses/%{name}
+%{__install} -m 0644 -D      %{build_srcdir}/%{name}.1.gz      -t %{buildroot}%{_mandir}/man1
+%{__install} -m 0644 -D      %{suppl_srcdir}/units/*.service    -t %{buildroot}%{_unitdir}
 %{__install} -m 0644 -D      %{suppl_srcdir}/firewallsvcs/*.xml -t %{buildroot}%{_prefix}/lib/firewalld/services
 %{__install} -m 0644 -D      %{suppl_srcdir}/sysconfig/%{name}  -T %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
@@ -91,7 +129,7 @@ cd -
 %doc README.md TESTING.md
 %{_bindir}/*
 %{_mandir}/man1/%{name}.1.gz
-%{_prefix}/lib/systemd/system/*
+%{_unitdir}/*
 %{_prefix}/lib/firewalld/services/*
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
@@ -106,6 +144,60 @@ fi
 
 
 %changelog
+* Fri Nov 4 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2.27.0-0%{?dist}
+- Today marks the dawn of a new era when Erigon development embraces SemVer!
+- All new versions from this day forth will release under the Erigon package atom
+- Truthfully, the dev team made this change earlier, but I was on holiday
+- Bumping to Erigon 2.27.0
+
+* Fri Nov 4 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.10.01-0%{?dist}
+- Bumping to Erigon2 to version 2022.10.01
+- Bumping GoLang version to v1.19.3
+- Final release of the Erigon2 package as we transition to semver
+- New Erigon packages will continue under the `erigon` namespace
+
+* Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.03-0%{?dist}
+- Building Erigon2 v2022.09.03
+
+* Tue Sep 20 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.02-0%{?dist}
+- Building Erigon2 v2022.09.02, soon to be followed by v2022.09.03
+- Bumped GoLang version to v1.19.1
+
+* Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-1%{?dist}
+- Removed the deprecated `cons' binary
+- Corrected bogus spec date
+
+* Mon Sep 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.09.01-0%{?dist}
+- Bumped Erigon2 version to v2022.09.01
+
+* Thu Sep 1 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.03-0%{?dist}
+- Bumped Erigon2 version to v2022.08.03
+- Bumped Go toolchain version to v1.19
+
+* Tue Aug 16 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.02-0%{?dist}
+- Bumped Erigon2 version to v2022.08.02
+
+* Tue Aug 9 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.08.01-0%{?dist}
+- Bumped Erigon2 version to v2022.08.01
+
+* Tue Aug 2 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.04-0%{?dist}
+- Bumped Erigon2 version to v2022.07.04
+- Bumped GoLang version to patch v1.18.5
+- Updated firewall rules to better reflect true purpose
+- Included additional useful utilities and daemons in bundle
+
+* Fri Jul 29 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.03-0%{?dist}
+- Bumped Erigon2 version to v2022.07.03
+
+* Tue Jul 12 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.07.02-0%{?dist}
+- Major revamp of build specification
+- GoLang now must be pulled independently due to lack of available v1.19 in RL8
+- Renamed all services from Erigon to Erigon2
+- Bumped build version to v2022.07.02
+
+* Tue May 3 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.04.03-0%{?dist}
+- First Erigon2 RPM release
+
 * Mon Mar 28 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2022.04.02-0%{?dist}
 - Fix for erroneous assert in MDBX
 - Change of skip analysis optimisation parameter

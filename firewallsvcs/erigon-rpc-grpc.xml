@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon RPC - gRPC</short>
+  <description>This service enables gRPC connections to the Erigon gRPC service. Enable this service if you intend to use protocol buffers to communicate with the Erigon RPC service.</description>
+  <port protocol="tcp" port="8547"/>
+</service>

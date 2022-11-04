@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Erigon Consensus API</short>
+  <description>This service exposes the Erigon Consensus internal API, facilitating inter-process connections between the prototype consensus client with the Erigon client, in preparation for the Ethereum fork. Enable these if intending to use the prototype consensus client with Erigon.</description>
+  <port protocol="tcp" port="9092"/>
+</service>

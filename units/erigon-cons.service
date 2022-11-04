@@ -1,12 +1,12 @@
 [Unit]
-Description=Erigon Sentry - Peer-to-peer connection broker running outside Erigon
+Description=Erigon Consensus - A Proof-of-concept for an external Erigon Consensus client
 Requires=erigon.service
 Documentation=https://github.com/ledgerwatch/erigon/
 
 [Service]
 Type=simple
 EnvironmentFile=-/etc/sysconfig/erigon
-ExecStart=/usr/bin/erigon-sentry --datadir $ERIGON_DATADIR $ERIGON_SENTRY_OPTIONS
+ExecStart=/usr/bin/erigon-cons --datadir $ERIGON_DATADIR $ERIGON_CONS_OPTIONS
 ExecReload=/usr/bin/kill -HUP $MAINPID
 UMask=0066
 Restart=on-failure

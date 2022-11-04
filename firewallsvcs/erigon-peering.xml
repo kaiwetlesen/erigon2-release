@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>Erigon Peering</short>
-  <description>These ports are used by Erigon for peer connections with the Ethereum network. Enable these ports for any system which will participate in an Ethereum network.</description>
-  <!-- Eth/66 Peering: -->
-  <port protocol="tcp" port="30303"/>
-  <port protocol="udp" port="30303"/>
-  <!-- Eth/65 Peering: -->
-  <port protocol="tcp" port="30304"/>
-  <port protocol="udp" port="30304"/>
+  <description>This service enables Erigon to establish typical peer-to-peer connections. This currently includes connections with an Ethereum-compatible network and download network snapshots from BitTorrent. Enable these ports for any system which will participate in an Ethereum-compatible network which provides state snapshots.</description>
+  <include service="erigon-peering-network"/>
+  <include service="erigon-peering-downloader"/>
 </service>
