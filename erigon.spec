@@ -5,18 +5,16 @@
 # The following conditional determine which version of Erigon we're building. They
 # may be overrode by invoking rpmbuild with -D 'macroname "macro value here"'.
 
-# Erigon version, buildable branch, & commit hash:
-# Current values:
-# GIT_TAG=v2.27.0
-%define spec_pkgver %{?pkgver}%{!?pkgver:2.27.0}
+# Erigon version:
+%define spec_pkg_ver %{?pkg_ver}%{!?pkg_ver:2.33.0}
 # Supplementary files version:
 %define spec_suppl_ver %{?suppl_ver}%{!?suppl_ver:0.2.0}
 # GoLang version:
-%define spec_go_ver %{?go_ver}%{!?go_ver:1.19.1}
+%define spec_go_ver %{?go_ver}%{!?go_ver:1.19.5}
 
 Name:           erigon
 Vendor:         Ledgerwatch
-Version:        %{spec_pkgver}
+Version:        %{spec_pkg_ver}
 Release:        0%{?dist}
 Summary:        A very efficient next-generation Ethereum execution client
 License:        LGPLv3
@@ -143,6 +141,11 @@ fi
 
 
 %changelog
+* Tue Jan 10 2023 Kai Wetlesen <kwetlesen@mac.com> - 2.33.1-0%{?dist}
+- This release marks the first independent release of the Erigon RPM
+- All new versions of the Erigon RPM will be released by me personally
+- Bumped Erigon version to 2.33.1, incorporating a critical bug fix from the Erigon team
+
 * Fri Nov 4 2022 Kai Wetlesen <kaiw@semiotic.ai> - 2.27.0-0%{?dist}
 - Today marks the dawn of a new era when Erigon development embraces SemVer!
 - All new versions from this day forth will release under the Erigon package atom
